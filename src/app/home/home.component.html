@@ -1,0 +1,187 @@
+<agm-map [latitude]="lat" [longitude]="lng" [scrollwheel]="false"  [zoom]="zoom" id="map" class="map" style="border-bottom:none; height:100%; width:100%; position:absolute; top:0; left:0;">
+
+ <agm-marker [latitude]="lat" [longitude]="lng" [iconUrl]="'/assets/nn.png'">
+   <agm-info-window>vous etes ici</agm-info-window>
+  </agm-marker>
+
+  <agm-marker   [latitude]="p.lat" [longitude]="p.lng" *ngFor="let p of places" [iconUrl]="'/assets/user.png'">
+
+    <agm-snazzy-info-window [maxWidth]="400" [closeWhenOthersOpen]="true">
+      <ng-template>
+
+        <agm-info-window>{{p.per.personne.cin.value}}{{p.per.personne.nompersonne.value}}{{p.per.personne.prenom.value}}
+
+        </agm-info-window>
+
+      </ng-template>
+    </agm-snazzy-info-window>
+  </agm-marker>
+<app-map-content></app-map-content>
+</agm-map>
+
+
+<div class="container">
+  <div class="row1">
+
+
+    <div id="map_filter1" >
+      <div>
+        <div>
+          <ul class="nav navbar-nav navbar-right" (click)="log()">
+            <li><a href="#"><span class="glyphicon glyphicon-log-in" id="c"></span> Log out</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="custom-search-input">
+      <div class="input-group col-md-12">
+        <input type="text" class="  search-query form-control" placeholder="Search" [(ngModel)]="term" name="term" autocorrect="off" autocapitalize="off" spellcheck="off" #search [formControl]="searchControl" />
+        <span class="input-group-btn">
+                                    <button class="btn btn-danger" type="button" (click)="findFromAddress(term)">
+                                        <span class=" glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="map_f" [hidden]="etat">
+
+
+  <p><a (click)="shows1()"><label class="btn btn-default btn-circle btn-lg" id="rr"><i class="glyphicon glyphicon-remove"></i></label><br></a></p>
+
+  <div class="form-style-8">
+            <form (submit)="ajout($event)">
+              <input type="text" id="full" name="field1" placeholder="Filter by Name..." name="nom" />
+              <button class="button1" type="submit" id="bfull"><i class="fa fa-star" ></i>Recherche</button>
+            </form>
+          </div>
+
+
+
+          <h3><i><b>Filter</b></i></h3>
+          <div class="filter-options">
+
+
+            <div class="filter-set" style="margin-top:0;">
+              <div id="buttonBar">
+                <!--style="background-color: #0099ff"-->
+                <button type="button" class="btn btn-success" id="btreloaddata" (click)="refresh()"><i class="fa fa-sun-o fa-sm pr-2" aria-hidden="true"></i>Reload Data</button>
+                <button type="button" class="btn btn-danger" id="btcleardata" (click)="cleaar(this.map)" ><i class="glyphicon glyphicon-ok"></i>Clear Data</button><br>
+                <!--<button type="button" class="btn btn-dark" id="checkall">Check All</button>-->
+              </div>
+            </div></div>
+        <div class="filter-set">
+          <label for="followers-select"><h4>Spécialités:</h4></label><br>
+
+          <form (submit)="listeselect($event)">
+
+            <select id="specialte-select" [(ngModel)]="select" (change)="change($event.target.value)" name="lll">
+              <!--&lt;!&ndash;<option value="0" selected="selected">Any</option>&ndash;&gt;-->
+
+              <option *ngFor="let l of listes; let i=index" value={{l}}  >
+                {{l}}  </option>
+            </select>
+          </form>
+        </div>
+
+
+
+  <div class="filter-set">
+    <label for="followers-select"><h4>Filter by city :</h4></label><br>
+
+
+      <select id="specialte-selectt" [(ngModel)]="select" (change)="ville($event.target.value)">
+
+        <!--&lt;!&ndash;<option value="0" selected="selected">Any</option>&ndash;&gt;-->
+
+        <option>Tunis</option>
+        <option>Sousse</option>
+
+        <option>Monastir</option>
+        <option>Gafsa</option>
+        <option>Ariana</option>
+        <option>Béja</option>
+        <option>Ben Arous</option>
+        <option>Bizerte</option>
+        <option>Gabes</option>
+        <option>Jendouba</option>
+
+        <option>Kairouan</option>
+        <option>Kasserine</option>
+        <option>Kebili</option>
+        <option>La Manouba</option>
+        <option>Le Kef</option>
+        <option>Mahdia</option>
+        <option>Médenine</option>
+        <option>Nabeul</option>
+        <option>Sfax</option>
+        <option>Sidi Bouzid</option>
+
+
+        <option>Siliana</option>
+        <option>Tataouine</option>
+        <option>Tozeur</option>
+        <option>Zaghouan</option>
+        <option>         </option>
+
+      </select>
+
+  </div>
+
+
+        <div class="filter-options" id="btfilterHommeFemme">
+          <div id="container_checkbox"></div>
+          <div class="checkbox_box">
+            <!--&lt;!&ndash; .filter-options &ndash;&gt;-->
+            <p><p> <label class="col-md-4">
+              <b><i class="fa fa-user-secret fa-sm pr-2" aria-hidden="true"></i>Homme</b>
+              <!--&lt;!&ndash;checked name="chb[]"&ndash;&gt;-->
+              <input id="1" type="checkbox" class="badgebox" [(ngModel)]="checkbox" (change)="checc1()" value="Homme" >
+            </label></p>
+            <p> <label class="col-md-4" id="femme">
+              <b><i class="fa fa-user" aria-hidden="true"></i>Femme</b>
+              <input id="2" type="checkbox" class="badgebox" [(ngModel)]="checkbox1" (change)="checc2()" value="Femme">
+            </label></p>
+
+
+
+
+
+</div></div></div>
+
+
+
+<!--
+          </div>
+          <a>  <button type="button" class="btn" id="c"  (click)="filt1()">Roua</button></a>
+        </div>-->
+
+        <div class="filter-options" id="btfiltercontainer">
+          <!-- .filter-options -->
+        </div>
+
+        <div id="map_filter" >
+
+          <ul>
+
+            <li><a (click)="shows()" ><div  class="w3-panel w3-border w3-border-black"><i class="icon_set_1_icon-57"></i><span>e-SAAD</span></div></a></li>
+            <li><a><div class="w3-panel w3-border w3-border-black"><i class="icon_set_1_icon-21"></i><span>Taxi e-SAAD</span></div></a></li>
+            <li><a><div class="w3-panel w3-border w3-border-black"><i class="icon_set_1_icon-23"></i><span>e-SAAD States</span></div></a></li>
+
+          </ul>
+        </div>
+
+
+
+<!--
+<li><a ><i class="icon_set_1_icon-57" (click)="rest11()"></i><span>e-SAAD</span></a></li>
+<li><a ><i class="icon_set_1_icon-21" (click)="rest2()"></i><span>Taxi e-SAAD</span></a></li>
+<li><a ><i class="icon_set_1_icon-23" (click)="rest3()"></i><span>e-SAAD States</span></a></li>
+-->
+
